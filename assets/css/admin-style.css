@@ -1,0 +1,640 @@
+/**
+ * QuickAccess WP Admin Styles
+ *
+ * @package QuickAccessWP
+ * @since 1.0.0
+ */
+
+/* ==========================================================================
+   General Styles
+   ========================================================================== */
+
+.qaw-wrap {
+    max-width: 1400px;
+}
+
+.qaw-wrap h1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.qaw-wrap .page-title-action {
+    margin-left: 10px;
+}
+
+.required {
+    color: #d63638;
+}
+
+/* ==========================================================================
+   Statistics Cards
+   ========================================================================== */
+
+.qaw-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.qaw-stat-card {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+    transition: box-shadow 0.2s ease;
+}
+
+.qaw-stat-card:hover {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.qaw-stat-number {
+    display: block;
+    font-size: 36px;
+    font-weight: 600;
+    color: #1d2327;
+    line-height: 1.2;
+}
+
+.qaw-stat-label {
+    display: block;
+    font-size: 13px;
+    color: #646970;
+    margin-top: 5px;
+}
+
+/* ==========================================================================
+   Filters & Search
+   ========================================================================== */
+
+.qaw-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.qaw-filters .subsubsub {
+    margin: 0;
+    float: none;
+}
+
+.qaw-search-form {
+    display: flex;
+    gap: 5px;
+}
+
+.qaw-search-form input[type="search"] {
+    min-width: 200px;
+}
+
+/* ==========================================================================
+   Table Styles
+   ========================================================================== */
+
+.qaw-table {
+    margin-top: 10px;
+}
+
+.qaw-table .column-slug {
+    width: 12%;
+}
+
+.qaw-table .column-url {
+    width: 28%;
+}
+
+.qaw-table .column-user {
+    width: 15%;
+}
+
+.qaw-table .column-usage {
+    width: 8%;
+    text-align: center;
+}
+
+.qaw-table .column-expires {
+    width: 15%;
+}
+
+.qaw-table .column-status {
+    width: 8%;
+    text-align: center;
+}
+
+.qaw-table .column-actions {
+    width: 14%;
+}
+
+.qaw-table .column-slug strong a {
+    font-size: 14px;
+}
+
+.qaw-table .column-user small {
+    color: #646970;
+}
+
+.qaw-table .column-actions {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.qaw-table .column-actions .button {
+    padding: 0 8px;
+    min-height: 30px;
+    line-height: 28px;
+}
+
+.qaw-table .column-actions .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    line-height: 28px;
+}
+
+.qaw-no-items {
+    text-align: center;
+    padding: 40px 20px !important;
+    color: #646970;
+}
+
+.qaw-no-items a {
+    margin-left: 5px;
+}
+
+/* ==========================================================================
+   URL Display
+   ========================================================================== */
+
+.qaw-url {
+    display: inline-block;
+    max-width: 100%;
+    font-size: 12px;
+    padding: 4px 8px;
+    background: #f0f0f1;
+    border-radius: 3px;
+    word-break: break-all;
+    margin-bottom: 5px;
+    color: #2271b1;
+}
+
+.qaw-copy-btn {
+    vertical-align: middle;
+    padding: 0 6px !important;
+    min-height: 26px !important;
+    line-height: 24px !important;
+}
+
+.qaw-copy-btn .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    line-height: 24px;
+}
+
+/* ==========================================================================
+   Badges
+   ========================================================================== */
+
+.qaw-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    line-height: 1.4;
+}
+
+.qaw-badge-active,
+.qaw-badge-success {
+    background: #d4edda;
+    color: #0a5c36;
+}
+
+.qaw-badge-inactive,
+.qaw-badge-disabled {
+    background: #f0f0f1;
+    color: #646970;
+}
+
+.qaw-badge-expired {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.qaw-badge-maxed {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.qaw-badge-denied,
+.qaw-badge-invalid {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+.qaw-form {
+    max-width: 800px;
+    background: #fff;
+    padding: 25px;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    margin-top: 20px;
+}
+
+.qaw-form .form-table th {
+    width: 180px;
+    padding-top: 15px;
+    vertical-align: top;
+}
+
+.qaw-form .form-table td {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.qaw-form .form-table input[type="text"],
+.qaw-form .form-table input[type="url"],
+.qaw-form .form-table input[type="number"],
+.qaw-form .form-table input[type="datetime-local"],
+.qaw-form .form-table select,
+.qaw-form .form-table textarea {
+    width: 100%;
+    max-width: 400px;
+}
+
+.qaw-form .form-table input[type="number"].small-text {
+    width: 80px;
+}
+
+.qaw-form .form-table .description {
+    margin-top: 8px;
+    color: #646970;
+}
+
+.qaw-form .submit {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #dcdcde;
+}
+
+/* Slug Input Group */
+.qaw-slug-input {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.qaw-slug-input input {
+    flex: 1;
+}
+
+.qaw-slug-input .button .dashicons {
+    margin-right: 3px;
+    line-height: inherit;
+}
+
+/* URL Preview */
+.qaw-url-preview {
+    margin-top: 10px;
+    padding: 10px 15px;
+    background: #f6f7f7;
+    border-radius: 4px;
+    border-left: 4px solid #2271b1;
+}
+
+.qaw-url-preview code {
+    background: transparent;
+    padding: 0;
+    color: #1d2327;
+    font-size: 13px;
+}
+
+#slug-preview {
+    color: #2271b1;
+    font-weight: 600;
+}
+
+/* Slug Status */
+.qaw-slug-status {
+    margin-top: 8px;
+    min-height: 20px;
+}
+
+.qaw-slug-status .checking {
+    color: #646970;
+    font-style: italic;
+}
+
+.qaw-slug-status .available {
+    color: #00a32a;
+    font-weight: 500;
+}
+
+.qaw-slug-status .unavailable {
+    color: #d63638;
+    font-weight: 500;
+}
+
+/* Form Messages */
+#qaw-form-message {
+    margin-top: 20px;
+}
+
+#qaw-form-message .notice {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Toggle Switch
+   ========================================================================== */
+
+.qaw-toggle {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.qaw-toggle input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.qaw-toggle-slider {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    background-color: #c3c4c7;
+    border-radius: 24px;
+    transition: background-color 0.2s ease;
+}
+
+.qaw-toggle-slider::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.qaw-toggle input:checked + .qaw-toggle-slider {
+    background-color: #2271b1;
+}
+
+.qaw-toggle input:checked + .qaw-toggle-slider::before {
+    transform: translateX(20px);
+}
+
+.qaw-toggle input:focus + .qaw-toggle-slider {
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #2271b1;
+}
+
+.qaw-toggle-label {
+    margin-left: 10px;
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   Settings Page
+   ========================================================================== */
+
+.qaw-settings-section {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 20px 25px;
+    margin-bottom: 20px;
+}
+
+.qaw-settings-section h2 {
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #dcdcde;
+    font-size: 16px;
+}
+
+.qaw-settings-section > .description {
+    margin-top: -5px;
+    margin-bottom: 15px;
+    color: #646970;
+}
+
+.qaw-settings-section .form-table {
+    margin-top: 0;
+}
+
+.qaw-settings-section .form-table th {
+    padding-left: 0;
+}
+
+/* ==========================================================================
+   Logs Page
+   ========================================================================== */
+
+.qaw-wrap .column-date {
+    width: 18%;
+}
+
+.qaw-wrap .column-ip {
+    width: 12%;
+}
+
+.qaw-wrap .column-message {
+    width: 30%;
+}
+
+/* ==========================================================================
+   Notices
+   ========================================================================== */
+
+.qaw-notice {
+    margin: 15px 0 !important;
+}
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.dashicons.spin {
+    animation: spin 1s linear infinite;
+}
+
+/* ==========================================================================
+   Responsive Styles
+   ========================================================================== */
+
+@media screen and (max-width: 1200px) {
+    .qaw-table .column-expires {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .qaw-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .qaw-table .column-url {
+        width: 35%;
+    }
+    
+    .qaw-table .column-user {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 782px) {
+    .qaw-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .qaw-filters {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .qaw-search-form {
+        width: 100%;
+    }
+    
+    .qaw-search-form input[type="search"] {
+        flex: 1;
+    }
+    
+    .qaw-table .column-url,
+    .qaw-table .column-usage {
+        display: none;
+    }
+    
+    .qaw-table .column-slug {
+        width: 30%;
+    }
+    
+    .qaw-table .column-status {
+        width: 20%;
+    }
+    
+    .qaw-table .column-actions {
+        width: 30%;
+    }
+    
+    .qaw-form {
+        padding: 15px;
+    }
+    
+    .qaw-form .form-table th {
+        width: 100%;
+        padding-bottom: 5px;
+    }
+    
+    .qaw-slug-input {
+        flex-direction: column;
+    }
+    
+    .qaw-slug-input input,
+    .qaw-slug-input .button {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .qaw-stat-card {
+        padding: 15px;
+    }
+    
+    .qaw-stat-number {
+        font-size: 28px;
+    }
+    
+    .qaw-table .column-actions {
+        flex-direction: column;
+    }
+    
+    .qaw-table .column-actions .button {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* ==========================================================================
+   Dark Mode Support (WordPress 5.7+)
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+    body.admin-color-modern .qaw-stat-card,
+    body.admin-color-modern .qaw-form,
+    body.admin-color-modern .qaw-settings-section {
+        background: #1e1e1e;
+        border-color: #3c434a;
+    }
+    
+    body.admin-color-modern .qaw-stat-number {
+        color: #f0f0f1;
+    }
+    
+    body.admin-color-modern .qaw-url {
+        background: #2c3338;
+        color: #72aee6;
+    }
+    
+    body.admin-color-modern .qaw-url-preview {
+        background: #2c3338;
+    }
+    
+    body.admin-color-modern .qaw-url-preview code {
+        color: #f0f0f1;
+    }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+    .qaw-stats,
+    .qaw-filters,
+    .column-actions,
+    .qaw-copy-btn,
+    .tablenav {
+        display: none !important;
+    }
+    
+    .qaw-table {
+        border: 1px solid #000;
+    }
+    
+    .qaw-badge {
+        border: 1px solid currentColor;
+        background: transparent !important;
+    }
+}
