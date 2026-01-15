@@ -1,26 +1,19 @@
 <?php
 /**
- * QuickAccess WP
- *
- * @package           QuickAccessWP
- * @author            Razu Ahammad
- * @copyright         2025 Razu Ahammad
- * @license           GPL-2.0-or-later
- *
- * @wordpress-plugin
- * Plugin Name:       QuickAccess WP
- * Plugin URI:        https://github.com/razuahammad55/quickaccess-wp
- * Description:       Create custom URL slugs for automatic user login with advanced security features. Perfect for client portals, preview links, and secure sharing.
- * Version:           1.0.0
+ * Plugin Name: QuickAccess WP
+ * Plugin URI: https://github.com/razuahammad55/quickaccess-wp
+ * Description: Create custom URL slugs for automatic user login with advanced security features. Perfect for client portals, preview links, and secure sharing.
+ * Version: 1.0.0
  * Requires at least: 6.0
- * Requires PHP:      7.4
- * Author:            Razu Ahammad
- * Author URI:        https://github.com/razuahammad55
- * Text Domain:       quickaccess-wp
- * Domain Path:       /languages
- * License:           GPL v2 or later
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Update URI:        https://github.com/razuahammad55/quickaccess-wp
+ * Requires PHP: 7.4
+ * Author: Razu Ahammad
+ * Author URI: https://github.com/razuahammad55
+ * License: GPL v2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: quickaccess-wp
+ * Domain Path: /languages
+ *
+ * @package QuickAccessWP
  */
 
 // Prevent direct access
@@ -43,16 +36,15 @@ define( 'QAW_PLUGIN_FILE', __FILE__ );
 final class QuickAccess_WP {
 
     /**
-     * Single instance of the class
+     * Single instance
      *
      * @var QuickAccess_WP|null
      */
     private static $instance = null;
 
     /**
-     * Get single instance
+     * Get instance
      *
-     * @since 1.0.0
      * @return QuickAccess_WP
      */
     public static function get_instance() {
@@ -64,34 +56,14 @@ final class QuickAccess_WP {
 
     /**
      * Constructor
-     *
-     * @since 1.0.0
      */
     private function __construct() {
         $this->load_dependencies();
-        $this->set_hooks();
-    }
-
-    /**
-     * Prevent cloning
-     *
-     * @since 1.0.0
-     */
-    private function __clone() {}
-
-    /**
-     * Prevent unserializing
-     *
-     * @since 1.0.0
-     */
-    public function __wakeup() {
-        throw new \Exception( 'Cannot unserialize singleton' );
+        $this->init_hooks();
     }
 
     /**
      * Load required files
-     *
-     * @since 1.0.0
      */
     private function load_dependencies() {
         require_once QAW_PLUGIN_DIR . 'includes/class-qaw-activator.php';
@@ -102,70 +74,51 @@ final class QuickAccess_WP {
     }
 
     /**
-     * Set up hooks
-     *
-     * @since 1.0.0
+     * Initialize hooks
      */
-    private function set_hooks() {
-        // Activation and deactivation
+    private function init_hooks() {
         register_activation_hook( QAW_PLUGIN_FILE, array( 'QAW_Activator', 'activate' ) );
         register_deactivation_hook( QAW_PLUGIN_FILE, array( 'QAW_Activator', 'deactivate' ) );
 
-        // Initialize components
         add_action( 'plugins_loaded', array( $this, 'init' ) );
-        
-        // Add settings link on plugins page
-        add_filter( 'plugin_action_links_' . QAW_PLUGIN_BASENAME, array( $this, 'add_settings_link' ) );
+        add_filter( 'plugin_action_links_' . QAW_PLUGIN_BASENAME, array( $this, 'plugin_links' ) );
     }
 
     /**
-     * Initialize plugin components
-     *
-     * @since 1.0.0
+     * Initialize plugin
      */
     public function init() {
-        // Load text domain
-        load_plugin_textdomain(
-            'quickaccess-wp',
-            false,
-            dirname( QAW_PLUGIN_BASENAME ) . '/languages'
-        );
+        load_plugin_textdomain( 'quickaccess-wp', false, dirname( QAW_PLUGIN_BASENAME ) . '/languages' );
 
-        // Initialize classes
         new QAW_Frontend();
-        
+
         if ( is_admin() ) {
             new QAW_Admin();
         }
     }
 
     /**
-     * Add settings link to plugins page
+     * Plugin action links
      *
-     * @since 1.0.0
      * @param array $links Existing links.
-     * @return array Modified links.
+     * @return array
      */
-    public function add_settings_link( $links ) {
-        $settings_link = sprintf(
-            '<a href="%s">%s</a>',
-            admin_url( 'admin.php?page=quickaccess-wp' ),
-            __( 'Settings', 'quickaccess-wp' )
+    public function plugin_links( $links ) {
+        $plugin_links = array(
+            '<a href="' . admin_url( 'admin.php?page=quickaccess-wp' ) . '">' . __( 'Manage Links', 'quickaccess-wp' ) . '</a>',
+            '<a href="' . admin_url( 'admin.php?page=qaw-settings' ) . '">' . __( 'Settings', 'quickaccess-wp' ) . '</a>',
         );
-        array_unshift( $links, $settings_link );
-        return $links;
+        return array_merge( $plugin_links, $links );
     }
 }
 
 /**
- * Initialize the plugin
+ * Initialize plugin
  *
- * @since 1.0.0
  * @return QuickAccess_WP
  */
 function quickaccess_wp() {
     return QuickAccess_WP::get_instance();
 }
 
-// Start the plugin
 quickaccess_wp();
