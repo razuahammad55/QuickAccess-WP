@@ -138,50 +138,59 @@ class QAW_Security {
     }
 
     /**
-     * Validate slug access
-     *
-     * @param object $slug Slug data.
-     * @return array
-     */
-    public static function validate_access( $slug ) {
-        if ( ! $slug->is_active ) {
-            return array(
-                'valid'   => false,
-                'code'    => 'inactive',
-                'message' => __( 'This access link has been disabled.', 'quickaccess-wp' ),
-            );
-        }
+ * Validate slug access
+ *
+ * @param object $slug Slug data.
+ * @return array
+ */
+public static function validate_access( $slug ) {
+    // Check if active
+    if ( ! $slug->is_active ) {
+        return array(
+            'valid'   => false,
+            'code'    => 'inactive',
+            'message' => __( 'This access link has been disabled.', 'quickaccess-wp' ),
+        );
+    }
 
-        if ( $slug->expires_at && strtotime( $slug->expires_at ) < time() ) {
+    // Check expiration - FIXED: proper timezone handling
+    if ( ! empty( $slug->expires_at ) ) {
+        $expires_timestamp = strtotime( $slug->expires_at );
+        $current_timestamp = current_time( 'timestamp' ); // WordPress timezone-aware timestamp
+        
+        if ( $current_timestamp > $expires_timestamp ) {
             return array(
                 'valid'   => false,
                 'code'    => 'expired',
                 'message' => __( 'This access link has expired.', 'quickaccess-wp' ),
             );
         }
+    }
 
-        if ( $slug->max_uses > 0 && $slug->current_uses >= $slug->max_uses ) {
-            return array(
-                'valid'   => false,
-                'code'    => 'maxed',
-                'message' => __( 'This access link has reached its usage limit.', 'quickaccess-wp' ),
-            );
-        }
-
-        $user = get_user_by( 'ID', $slug->user_id );
-        if ( ! $user ) {
-            return array(
-                'valid'   => false,
-                'code'    => 'no_user',
-                'message' => __( 'User account not found.', 'quickaccess-wp' ),
-            );
-        }
-
+    // Check max uses
+    if ( $slug->max_uses > 0 && $slug->current_uses >= $slug->max_uses ) {
         return array(
-            'valid' => true,
-            'user'  => $user,
+            'valid'   => false,
+            'code'    => 'maxed',
+            'message' => __( 'This access link has reached its usage limit.', 'quickaccess-wp' ),
         );
     }
+
+    // Check user exists
+    $user = get_user_by( 'ID', $slug->user_id );
+    if ( ! $user ) {
+        return array(
+            'valid'   => false,
+            'code'    => 'no_user',
+            'message' => __( 'User account not found.', 'quickaccess-wp' ),
+        );
+    }
+
+    return array(
+        'valid' => true,
+        'user'  => $user,
+    );
+}
 
     /**
      * Generate random slug
