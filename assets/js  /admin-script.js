@@ -1,6 +1,5 @@
 /**
  * QuickAccess WP Admin Scripts
- *
  * @package QuickAccessWP
  * @version 1.0.0
  */
@@ -15,25 +14,12 @@
         },
 
         bindEvents: function() {
-            // Copy URL with icon change
             $(document).on('click', '.qaw-copy-btn', this.copyUrl);
-            
-            // Delete slug
             $(document).on('click', '.qaw-delete-btn', this.deleteSlug);
-            
-            // Table toggle (new toggle switch)
-            $(document).on('change', '.qaw-table-toggle input', this.toggleSlug);
-            
-            // Generate slug - only spin icon
+            $(document).on('change', '.qaw-status-toggle', this.toggleSlug);
             $(document).on('click', '#qaw-generate-slug', this.generateSlug);
-            
-            // Form submit
             $(document).on('submit', '#qaw-form', this.submitForm);
-            
-            // Slug preview
             $(document).on('input', '#qaw-slug', this.updatePreview);
-            
-            // Check slug availability
             $(document).on('blur', '#qaw-slug', this.checkSlug);
         },
 
@@ -46,42 +32,49 @@
             $('#slug-preview').text(slug);
         },
 
-        // IMPROVED: Copy with icon change to checkmark
+        // Copy URL with checkmark feedback
         copyUrl: function(e) {
             e.preventDefault();
+            e.stopPropagation();
+            
             const $btn = $(this);
             const url = $btn.data('url');
 
-            // Store original icon
-            const originalIcon = $btn.html();
-            
-            // Checkmark icon
-            const checkIcon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>';
+            if (!url) return;
 
-            if (navigator.clipboard) {
+            // Copy to clipboard
+            if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(url).then(function() {
-                    // Change to checkmark and add success class
-                    $btn.html(checkIcon).addClass('copied');
-                    QAW.toast(qawAdmin.i18n.copied, 'success');
-                    
-                    // Revert after 2 seconds
-                    setTimeout(function() {
-                        $btn.html(originalIcon).removeClass('copied');
-                    }, 2000);
+                    QAW.showCopySuccess($btn);
+                }).catch(function() {
+                    QAW.fallbackCopy(url, $btn);
                 });
             } else {
-                // Fallback for older browsers
-                const temp = $('<input>').val(url).appendTo('body').select();
-                document.execCommand('copy');
-                temp.remove();
-                
-                $btn.html(checkIcon).addClass('copied');
-                QAW.toast(qawAdmin.i18n.copied, 'success');
-                
-                setTimeout(function() {
-                    $btn.html(originalIcon).removeClass('copied');
-                }, 2000);
+                QAW.fallbackCopy(url, $btn);
             }
+        },
+
+        fallbackCopy: function(url, $btn) {
+            const $temp = $('<textarea>');
+            $temp.val(url).css({ position: 'fixed', left: '-9999px' }).appendTo('body').select();
+            
+            try {
+                document.execCommand('copy');
+                QAW.showCopySuccess($btn);
+            } catch (err) {
+                QAW.toast('Failed to copy', 'error');
+            }
+            
+            $temp.remove();
+        },
+
+        showCopySuccess: function($btn) {
+            $btn.addClass('copied');
+            QAW.toast(qawAdmin.i18n.copied, 'success');
+            
+            setTimeout(function() {
+                $btn.removeClass('copied');
+            }, 2000);
         },
 
         deleteSlug: function(e) {
@@ -123,12 +116,11 @@
             });
         },
 
-        // UPDATED: Toggle using checkbox change event
-        toggleSlug: function(e) {
+        // Toggle status via switch
+        toggleSlug: function() {
             const $checkbox = $(this);
-            const $toggle = $checkbox.closest('.qaw-table-toggle');
-            const id = $toggle.data('id');
-            const newActive = $checkbox.is(':checked') ? 1 : 0;
+            const id = $checkbox.data('id');
+            const isChecked = $checkbox.is(':checked');
 
             $checkbox.prop('disabled', true);
 
@@ -139,42 +131,33 @@
                     action: 'qaw_toggle_slug',
                     nonce: qawAdmin.nonce,
                     id: id,
-                    active: newActive ? 0 : 1 // Send opposite because we want to toggle
+                    active: isChecked ? 0 : 1
                 },
                 success: function(response) {
                     if (response.success) {
                         QAW.toast(response.data.message, 'success');
-                        // Update the badge in the status column
-                        const $row = $toggle.closest('tr');
-                        const $badge = $row.find('.column-status .qaw-badge');
-                        if (response.data.is_active) {
-                            $badge.removeClass('qaw-badge-inactive').addClass('qaw-badge-active').text('Active');
-                        } else {
-                            $badge.removeClass('qaw-badge-active').addClass('qaw-badge-inactive').text('Disabled');
-                        }
                     } else {
-                        // Revert checkbox
-                        $checkbox.prop('checked', !newActive);
+                        $checkbox.prop('checked', !isChecked);
                         QAW.toast(response.data.message, 'error');
                     }
                     $checkbox.prop('disabled', false);
                 },
                 error: function() {
-                    // Revert checkbox
-                    $checkbox.prop('checked', !newActive);
+                    $checkbox.prop('checked', !isChecked);
                     QAW.toast(qawAdmin.i18n.error, 'error');
                     $checkbox.prop('disabled', false);
                 }
             });
         },
 
-        // UPDATED: Only spin the SVG icon, not the whole button
+        // Generate slug - only icon spins
         generateSlug: function(e) {
             e.preventDefault();
 
             const $btn = $(this);
             
-            // Add generating class to spin only the icon
+            if ($btn.hasClass('generating')) return;
+            
             $btn.addClass('generating').prop('disabled', true);
 
             $.ajax({
@@ -186,11 +169,13 @@
                 },
                 success: function(response) {
                     if (response.success) {
-                        $('#qaw-slug').val(response.data.slug).trigger('input').trigger('blur');
+                        $('#qaw-slug').val(response.data.slug).trigger('input');
+                        setTimeout(function() {
+                            $('#qaw-slug').trigger('blur');
+                        }, 100);
                     }
-                    $btn.removeClass('generating').prop('disabled', false);
                 },
-                error: function() {
+                complete: function() {
                     $btn.removeClass('generating').prop('disabled', false);
                 }
             });
@@ -206,7 +191,7 @@
                 return;
             }
 
-            $status.html('<span class="checking">⏳ Checking...</span>').removeClass('available unavailable').addClass('checking');
+            $status.html('Checking...').removeClass('available unavailable').addClass('checking');
 
             $.ajax({
                 url: qawAdmin.ajaxUrl,
@@ -220,9 +205,9 @@
                 success: function(response) {
                     $status.removeClass('checking');
                     if (response.success && response.data.available) {
-                        $status.html('<span class="available">✓ ' + qawAdmin.i18n.available + '</span>').addClass('available');
+                        $status.html('✓ ' + qawAdmin.i18n.available).addClass('available').removeClass('unavailable');
                     } else {
-                        $status.html('<span class="unavailable">✗ ' + qawAdmin.i18n.unavailable + '</span>').addClass('unavailable');
+                        $status.html('✗ ' + qawAdmin.i18n.unavailable).addClass('unavailable').removeClass('available');
                     }
                 },
                 error: function() {
@@ -279,10 +264,9 @@
         },
 
         toast: function(message, type) {
-            // Remove existing toasts
             $('.qaw-toast').remove();
             
-            const $toast = $('<div class="qaw-toast ' + type + '">' + message + '</div>');
+            const $toast = $('<div class="qaw-toast ' + (type || '') + '">' + message + '</div>');
             $('body').append($toast);
             
             setTimeout(function() {
