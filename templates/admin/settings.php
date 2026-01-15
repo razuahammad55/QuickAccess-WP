@@ -1,9 +1,7 @@
 <?php
 /**
  * Admin Settings Template
- *
  * @package QuickAccessWP
- * @since 1.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -38,19 +36,19 @@ if ( ! defined( 'ABSPATH' ) ) {
                         <div class="qaw-form-row">
                             <label for="qaw_rate_limit_attempts"><?php esc_html_e( 'Max Failed Attempts', 'quickaccess-wp' ); ?></label>
                             <input type="number" id="qaw_rate_limit_attempts" name="qaw_rate_limit_attempts" value="<?php echo esc_attr( get_option( 'qaw_rate_limit_attempts', 5 ) ); ?>" min="1" max="100" style="max-width: 100px;">
-                            <p class="description"><?php esc_html_e( 'Number of failed attempts before blocking an IP.', 'quickaccess-wp' ); ?></p>
+                            <p class="description"><?php esc_html_e( 'Number of failed attempts before blocking.', 'quickaccess-wp' ); ?></p>
                         </div>
 
                         <div class="qaw-form-row">
                             <label for="qaw_rate_limit_window"><?php esc_html_e( 'Time Window (minutes)', 'quickaccess-wp' ); ?></label>
                             <input type="number" id="qaw_rate_limit_window" name="qaw_rate_limit_window" value="<?php echo esc_attr( get_option( 'qaw_rate_limit_window', 15 ) ); ?>" min="1" max="1440" style="max-width: 100px;">
-                            <p class="description"><?php esc_html_e( 'Time window for counting failed attempts.', 'quickaccess-wp' ); ?></p>
+                            <p class="description"><?php esc_html_e( 'Time window for counting attempts.', 'quickaccess-wp' ); ?></p>
                         </div>
 
                         <div class="qaw-form-row">
                             <label for="qaw_block_duration"><?php esc_html_e( 'Block Duration (minutes)', 'quickaccess-wp' ); ?></label>
                             <input type="number" id="qaw_block_duration" name="qaw_block_duration" value="<?php echo esc_attr( get_option( 'qaw_block_duration', 60 ) ); ?>" min="1" max="10080" style="max-width: 100px;">
-                            <p class="description"><?php esc_html_e( 'How long to block an IP after exceeding the limit.', 'quickaccess-wp' ); ?></p>
+                            <p class="description"><?php esc_html_e( 'How long to block after limit exceeded.', 'quickaccess-wp' ); ?></p>
                         </div>
                     </div>
                 </div>
@@ -71,13 +69,13 @@ if ( ! defined( 'ABSPATH' ) ) {
                     <div class="qaw-form-row">
                         <label for="qaw_default_redirect"><?php esc_html_e( 'Default Redirect URL', 'quickaccess-wp' ); ?></label>
                         <input type="url" id="qaw_default_redirect" name="qaw_default_redirect" value="<?php echo esc_url( get_option( 'qaw_default_redirect', home_url() ) ); ?>" placeholder="<?php echo esc_url( home_url() ); ?>">
-                        <p class="description"><?php esc_html_e( 'Default redirect URL when no custom URL is set for a link.', 'quickaccess-wp' ); ?></p>
+                        <p class="description"><?php esc_html_e( 'Default redirect URL when no custom URL is set.', 'quickaccess-wp' ); ?></p>
                     </div>
 
                     <div class="qaw-form-row">
                         <label for="qaw_invalid_slug_message"><?php esc_html_e( 'Invalid Link Message', 'quickaccess-wp' ); ?></label>
                         <textarea id="qaw_invalid_slug_message" name="qaw_invalid_slug_message" rows="3"><?php echo esc_textarea( get_option( 'qaw_invalid_slug_message', __( 'This access link is invalid or has expired.', 'quickaccess-wp' ) ) ); ?></textarea>
-                        <p class="description"><?php esc_html_e( 'Message shown when an invalid or expired link is accessed.', 'quickaccess-wp' ); ?></p>
+                        <p class="description"><?php esc_html_e( 'Message shown when an invalid link is accessed.', 'quickaccess-wp' ); ?></p>
                     </div>
                 </div>
             </div>
@@ -95,17 +93,47 @@ if ( ! defined( 'ABSPATH' ) ) {
                 <div class="qaw-card-body">
                     <div class="qaw-form-row">
                         <label><?php esc_html_e( 'Enable Logging', 'quickaccess-wp' ); ?></label>
-                        <label class="qaw-toggle">
-                            <input type="checkbox" name="qaw_enable_logging" value="1" <?php checked( get_option( 'qaw_enable_logging', 1 ), 1 ); ?>>
-                            <span class="qaw-toggle-slider"></span>
-                            <span class="qaw-toggle-label"><?php esc_html_e( 'Log all access attempts', 'quickaccess-wp' ); ?></span>
-                        </label>
+                        <div class="qaw-switch-wrap">
+                            <label class="qaw-switch">
+                                <input type="checkbox" name="qaw_enable_logging" value="1" <?php checked( get_option( 'qaw_enable_logging', 1 ), 1 ); ?>>
+                                <span class="qaw-switch-slider"></span>
+                            </label>
+                            <span class="qaw-switch-label"><?php esc_html_e( 'Log all access attempts', 'quickaccess-wp' ); ?></span>
+                        </div>
                     </div>
 
                     <div class="qaw-form-row">
                         <label for="qaw_log_retention_days"><?php esc_html_e( 'Log Retention (days)', 'quickaccess-wp' ); ?></label>
                         <input type="number" id="qaw_log_retention_days" name="qaw_log_retention_days" value="<?php echo esc_attr( get_option( 'qaw_log_retention_days', 30 ) ); ?>" min="1" max="365" style="max-width: 100px;">
                         <p class="description"><?php esc_html_e( 'Logs older than this will be automatically deleted.', 'quickaccess-wp' ); ?></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Management -->
+            <div class="qaw-card">
+                <div class="qaw-card-header">
+                    <h2>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        <?php esc_html_e( 'Data Management', 'quickaccess-wp' ); ?>
+                    </h2>
+                </div>
+                <div class="qaw-card-body">
+                    <div class="qaw-form-row">
+                        <label><?php esc_html_e( 'Delete Data on Uninstall', 'quickaccess-wp' ); ?></label>
+                        <div class="qaw-switch-wrap">
+                            <label class="qaw-switch">
+                                <input type="checkbox" name="qaw_delete_data_on_uninstall" value="1" <?php checked( get_option( 'qaw_delete_data_on_uninstall', 0 ), 1 ); ?>>
+                                <span class="qaw-switch-slider"></span>
+                            </label>
+                            <span class="qaw-switch-label"><?php esc_html_e( 'Remove all plugin data when uninstalled', 'quickaccess-wp' ); ?></span>
+                        </div>
+                        <p class="description" style="color: var(--qaw-danger); margin-top: 10px;">
+                            <strong><?php esc_html_e( 'Warning:', 'quickaccess-wp' ); ?></strong>
+                            <?php esc_html_e( 'If enabled, all access links, logs, and settings will be permanently deleted when the plugin is uninstalled.', 'quickaccess-wp' ); ?>
+                        </p>
                     </div>
                 </div>
             </div>
