@@ -279,7 +279,7 @@
 }
 
 .qaw-table .column-url {
-    width: 25%;
+    width: 22%;
 }
 
 .qaw-table .column-user {
@@ -292,16 +292,16 @@
 }
 
 .qaw-table .column-expires {
-    width: 15%;
+    width: 14%;
 }
 
 .qaw-table .column-status {
-    width: 8%;
+    width: 10%;
     text-align: center;
 }
 
 .qaw-table .column-actions {
-    width: 9%;
+    width: 11%;
     text-align: right;
 }
 
@@ -330,7 +330,7 @@
 
 .qaw-url {
     display: inline-block;
-    max-width: 200px;
+    max-width: 180px;
     padding: 6px 12px;
     background: var(--qaw-gray-100);
     border-radius: var(--qaw-radius);
@@ -342,6 +342,7 @@
     text-overflow: ellipsis;
 }
 
+/* Copy Button - IMPROVED */
 .qaw-copy-btn {
     padding: 6px 10px;
     background: #fff;
@@ -352,6 +353,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    min-width: 34px;
+    min-height: 34px;
 }
 
 .qaw-copy-btn:hover {
@@ -363,6 +366,17 @@
     width: 16px;
     height: 16px;
     color: var(--qaw-gray-500);
+    transition: all 0.2s ease;
+}
+
+/* Copy Button Success State */
+.qaw-copy-btn.copied {
+    background: var(--qaw-success-bg);
+    border-color: var(--qaw-success);
+}
+
+.qaw-copy-btn.copied svg {
+    color: var(--qaw-success);
 }
 
 /* User column */
@@ -456,13 +470,14 @@
 }
 
 /* ==========================================================================
-   Action Buttons
+   Action Buttons & Table Toggle
    ========================================================================== */
 
 .qaw-actions {
     display: flex;
     gap: 8px;
     justify-content: flex-end;
+    align-items: center;
 }
 
 .qaw-action-btn {
@@ -504,6 +519,69 @@
 
 .qaw-action-btn.delete:hover svg {
     color: var(--qaw-danger);
+}
+
+/* ==========================================================================
+   Table Row Toggle Switch - NEW IMPROVED VERSION
+   ========================================================================== */
+
+.qaw-table-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.qaw-table-toggle input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.qaw-table-toggle-slider {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    background: var(--qaw-gray-300);
+    border-radius: 24px;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.qaw-table-toggle-slider::before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Active State - Green */
+.qaw-table-toggle input:checked + .qaw-table-toggle-slider {
+    background: var(--qaw-success);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(16, 185, 129, 0.3);
+}
+
+.qaw-table-toggle input:checked + .qaw-table-toggle-slider::before {
+    transform: translateX(20px);
+}
+
+/* Focus State */
+.qaw-table-toggle input:focus + .qaw-table-toggle-slider {
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+/* Disabled State */
+.qaw-table-toggle input:disabled + .qaw-table-toggle-slider {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* ==========================================================================
@@ -649,45 +727,79 @@
     color: var(--qaw-gray-500);
 }
 
-/* Toggle switch */
+/* ==========================================================================
+   Form Toggle Switch - IMPROVED VISIBILITY
+   ========================================================================== */
+
 .qaw-toggle {
     display: inline-flex;
     align-items: center;
     cursor: pointer;
+    user-select: none;
 }
 
 .qaw-toggle input {
-    display: none;
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
 .qaw-toggle-slider {
-    width: 48px;
-    height: 26px;
-    background: var(--qaw-gray-300);
-    border-radius: 26px;
     position: relative;
-    transition: all 0.2s ease;
+    width: 52px;
+    height: 28px;
+    background: var(--qaw-gray-300);
+    border-radius: 28px;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.qaw-toggle-slider::after {
+.qaw-toggle-slider::before {
     content: '';
     position: absolute;
     top: 3px;
     left: 3px;
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     background: #fff;
     border-radius: 50%;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* Inactive State - Show X */
+.qaw-toggle-slider::after {
+    content: '✕';
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    font-size: 10px;
+    font-weight: bold;
+    color: #fff;
+    opacity: 0.7;
+}
+
+/* Active State - Green with Checkmark */
 .qaw-toggle input:checked + .qaw-toggle-slider {
-    background: var(--qaw-primary);
+    background: linear-gradient(135deg, #34d399, var(--qaw-success));
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 12px rgba(16, 185, 129, 0.4);
+}
+
+.qaw-toggle input:checked + .qaw-toggle-slider::before {
+    transform: translateX(24px);
 }
 
 .qaw-toggle input:checked + .qaw-toggle-slider::after {
-    transform: translateX(22px);
+    content: '✓';
+    right: auto;
+    left: 10px;
+}
+
+/* Focus State */
+.qaw-toggle input:focus + .qaw-toggle-slider {
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
 }
 
 .qaw-toggle-label {
@@ -765,6 +877,22 @@
     padding-top: 20px;
     border-top: 1px solid var(--qaw-gray-200);
     margin-top: 24px;
+}
+
+/* ==========================================================================
+   Generate Button - SVG ICON SPIN ONLY
+   ========================================================================== */
+
+#qaw-generate-slug {
+    position: relative;
+}
+
+#qaw-generate-slug svg {
+    transition: transform 0.3s ease;
+}
+
+#qaw-generate-slug.generating svg {
+    animation: qaw-spin-icon 0.8s linear infinite;
 }
 
 /* ==========================================================================
@@ -885,6 +1013,19 @@
 }
 
 /* ==========================================================================
+   Animations
+   ========================================================================== */
+
+@keyframes qaw-spin-icon {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ==========================================================================
    Responsive
    ========================================================================== */
 
@@ -940,26 +1081,4 @@
     .qaw-slug-input-group {
         flex-direction: column;
     }
-}
-
-/* ==========================================================================
-   Animations
-   ========================================================================== */
-
-@keyframes qaw-spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-.qaw-spin {
-    animation: qaw-spin 1s linear infinite;
-}
-
-@keyframes qaw-fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.qaw-fade-in {
-    animation: qaw-fade-in 0.3s ease;
 }
