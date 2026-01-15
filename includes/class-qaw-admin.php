@@ -200,92 +200,108 @@ class QAW_Admin {
     }
 
     /**
-     * AJAX: Create slug
-     */
-    public function ajax_create_slug() {
-        check_ajax_referer( 'qaw_nonce', 'nonce' );
+ * AJAX: Create slug
+ */
+public function ajax_create_slug() {
+    check_ajax_referer( 'qaw_nonce', 'nonce' );
 
-        if ( ! current_user_can( 'manage_options' ) ) {
-            wp_send_json_error( array( 'message' => __( 'Permission denied.', 'quickaccess-wp' ) ) );
-        }
-
-        $slug = isset( $_POST['slug'] ) ? sanitize_title( $_POST['slug'] ) : '';
-        $user_id = isset( $_POST['user_id'] ) ? absint( $_POST['user_id'] ) : 0;
-
-        if ( empty( $slug ) || empty( $user_id ) ) {
-            wp_send_json_error( array( 'message' => __( 'Slug and User are required.', 'quickaccess-wp' ) ) );
-        }
-
-        if ( QAW_Database::slug_exists( $slug ) ) {
-            wp_send_json_error( array( 'message' => __( 'This slug already exists.', 'quickaccess-wp' ) ) );
-        }
-
-        if ( QAW_Database::slug_conflicts( $slug ) ) {
-            wp_send_json_error( array( 'message' => __( 'This slug conflicts with existing content.', 'quickaccess-wp' ) ) );
-        }
-
-        $result = QAW_Database::create_slug( array(
-            'slug'         => $slug,
-            'user_id'      => $user_id,
-            'redirect_url' => isset( $_POST['redirect_url'] ) ? esc_url_raw( $_POST['redirect_url'] ) : '',
-            'max_uses'     => isset( $_POST['max_uses'] ) ? absint( $_POST['max_uses'] ) : 0,
-            'expires_at'   => isset( $_POST['expires_at'] ) && ! empty( $_POST['expires_at'] ) ? sanitize_text_field( $_POST['expires_at'] ) : null,
-        ) );
-
-        if ( $result ) {
-            wp_send_json_success( array(
-                'message' => __( 'Access link created!', 'quickaccess-wp' ),
-                'id'      => $result,
-                'url'     => home_url( '/' . $slug ),
-            ) );
-        }
-
-        wp_send_json_error( array( 'message' => __( 'Failed to create access link.', 'quickaccess-wp' ) ) );
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( array( 'message' => __( 'Permission denied.', 'quickaccess-wp' ) ) );
     }
 
-    /**
-     * AJAX: Update slug
-     */
-    public function ajax_update_slug() {
-        check_ajax_referer( 'qaw_nonce', 'nonce' );
+    $slug = isset( $_POST['slug'] ) ? sanitize_title( $_POST['slug'] ) : '';
+    $user_id = isset( $_POST['user_id'] ) ? absint( $_POST['user_id'] ) : 0;
 
-        if ( ! current_user_can( 'manage_options' ) ) {
-            wp_send_json_error( array( 'message' => __( 'Permission denied.', 'quickaccess-wp' ) ) );
-        }
-
-        $id = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
-        $slug = isset( $_POST['slug'] ) ? sanitize_title( $_POST['slug'] ) : '';
-
-        if ( ! $id || empty( $slug ) ) {
-            wp_send_json_error( array( 'message' => __( 'Invalid data.', 'quickaccess-wp' ) ) );
-        }
-
-        if ( QAW_Database::slug_exists( $slug, $id ) ) {
-            wp_send_json_error( array( 'message' => __( 'This slug already exists.', 'quickaccess-wp' ) ) );
-        }
-
-        if ( QAW_Database::slug_conflicts( $slug ) ) {
-            wp_send_json_error( array( 'message' => __( 'This slug conflicts with existing content.', 'quickaccess-wp' ) ) );
-        }
-
-        $result = QAW_Database::update_slug( $id, array(
-            'slug'         => $slug,
-            'user_id'      => isset( $_POST['user_id'] ) ? absint( $_POST['user_id'] ) : 0,
-            'redirect_url' => isset( $_POST['redirect_url'] ) ? esc_url_raw( $_POST['redirect_url'] ) : '',
-            'max_uses'     => isset( $_POST['max_uses'] ) ? absint( $_POST['max_uses'] ) : 0,
-            'expires_at'   => isset( $_POST['expires_at'] ) && ! empty( $_POST['expires_at'] ) ? sanitize_text_field( $_POST['expires_at'] ) : null,
-            'is_active'    => isset( $_POST['is_active'] ) ? 1 : 0,
-        ) );
-
-        if ( false !== $result ) {
-            wp_send_json_success( array(
-                'message' => __( 'Access link updated!', 'quickaccess-wp' ),
-                'url'     => home_url( '/' . $slug ),
-            ) );
-        }
-
-        wp_send_json_error( array( 'message' => __( 'Failed to update access link.', 'quickaccess-wp' ) ) );
+    if ( empty( $slug ) || empty( $user_id ) ) {
+        wp_send_json_error( array( 'message' => __( 'Slug and User are required.', 'quickaccess-wp' ) ) );
     }
+
+    if ( QAW_Database::slug_exists( $slug ) ) {
+        wp_send_json_error( array( 'message' => __( 'This slug already exists.', 'quickaccess-wp' ) ) );
+    }
+
+    if ( QAW_Database::slug_conflicts( $slug ) ) {
+        wp_send_json_error( array( 'message' => __( 'This slug conflicts with existing content.', 'quickaccess-wp' ) ) );
+    }
+
+    // Fix: Properly format expires_at datetime
+    $expires_at = null;
+    if ( ! empty( $_POST['expires_at'] ) ) {
+        $expires_at = sanitize_text_field( $_POST['expires_at'] );
+        // Convert from datetime-local format to MySQL format
+        $expires_at = str_replace( 'T', ' ', $expires_at ) . ':00';
+    }
+
+    $result = QAW_Database::create_slug( array(
+        'slug'         => $slug,
+        'user_id'      => $user_id,
+        'redirect_url' => isset( $_POST['redirect_url'] ) ? esc_url_raw( $_POST['redirect_url'] ) : '',
+        'max_uses'     => isset( $_POST['max_uses'] ) ? absint( $_POST['max_uses'] ) : 0,
+        'expires_at'   => $expires_at,
+    ) );
+
+    if ( $result ) {
+        wp_send_json_success( array(
+            'message' => __( 'Access link created!', 'quickaccess-wp' ),
+            'id'      => $result,
+            'url'     => home_url( '/' . $slug ),
+        ) );
+    }
+
+    wp_send_json_error( array( 'message' => __( 'Failed to create access link.', 'quickaccess-wp' ) ) );
+}
+
+/**
+ * AJAX: Update slug
+ */
+public function ajax_update_slug() {
+    check_ajax_referer( 'qaw_nonce', 'nonce' );
+
+    if ( ! current_user_can( 'manage_options' ) ) {
+        wp_send_json_error( array( 'message' => __( 'Permission denied.', 'quickaccess-wp' ) ) );
+    }
+
+    $id = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
+    $slug = isset( $_POST['slug'] ) ? sanitize_title( $_POST['slug'] ) : '';
+
+    if ( ! $id || empty( $slug ) ) {
+        wp_send_json_error( array( 'message' => __( 'Invalid data.', 'quickaccess-wp' ) ) );
+    }
+
+    if ( QAW_Database::slug_exists( $slug, $id ) ) {
+        wp_send_json_error( array( 'message' => __( 'This slug already exists.', 'quickaccess-wp' ) ) );
+    }
+
+    if ( QAW_Database::slug_conflicts( $slug ) ) {
+        wp_send_json_error( array( 'message' => __( 'This slug conflicts with existing content.', 'quickaccess-wp' ) ) );
+    }
+
+    // Fix: Properly format expires_at datetime
+    $expires_at = null;
+    if ( ! empty( $_POST['expires_at'] ) ) {
+        $expires_at = sanitize_text_field( $_POST['expires_at'] );
+        // Convert from datetime-local format to MySQL format
+        $expires_at = str_replace( 'T', ' ', $expires_at ) . ':00';
+    }
+
+    $result = QAW_Database::update_slug( $id, array(
+        'slug'         => $slug,
+        'user_id'      => isset( $_POST['user_id'] ) ? absint( $_POST['user_id'] ) : 0,
+        'redirect_url' => isset( $_POST['redirect_url'] ) ? esc_url_raw( $_POST['redirect_url'] ) : '',
+        'max_uses'     => isset( $_POST['max_uses'] ) ? absint( $_POST['max_uses'] ) : 0,
+        'expires_at'   => $expires_at,
+        'is_active'    => isset( $_POST['is_active'] ) ? absint( $_POST['is_active'] ) : 0,
+    ) );
+
+    if ( false !== $result ) {
+        wp_send_json_success( array(
+            'message' => __( 'Access link updated!', 'quickaccess-wp' ),
+            'url'     => home_url( '/' . $slug ),
+        ) );
+    }
+
+    wp_send_json_error( array( 'message' => __( 'Failed to update access link.', 'quickaccess-wp' ) ) );
+}
 
     /**
      * AJAX: Delete slug
