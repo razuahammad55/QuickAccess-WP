@@ -175,7 +175,7 @@
     gap: 10px;
 }
 
-.qaw-search-box input {
+.qaw-search-box input[type="search"] {
     min-width: 250px;
     padding: 10px 16px;
     border: 1px solid var(--qaw-gray-300);
@@ -184,7 +184,7 @@
     transition: all 0.2s ease;
 }
 
-.qaw-search-box input:focus {
+.qaw-search-box input[type="search"]:focus {
     outline: none;
     border-color: var(--qaw-primary);
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
@@ -291,10 +291,7 @@
     text-overflow: ellipsis;
 }
 
-/* ==========================================
-   COPY BUTTON - SINGLE ICON SWAP
-   ========================================== */
-
+/* Copy Button */
 .qaw-copy-btn {
     width: 34px;
     height: 34px;
@@ -307,7 +304,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
 }
 
 .qaw-copy-btn:hover {
@@ -319,10 +315,8 @@
     width: 16px;
     height: 16px;
     color: var(--qaw-gray-500);
-    transition: all 0.2s ease;
 }
 
-/* Success State - Green background and border */
 .qaw-copy-btn.copied {
     background: var(--qaw-success-bg);
     border-color: var(--qaw-success);
@@ -396,7 +390,7 @@
 .qaw-badge-denied, .qaw-badge-invalid { background: var(--qaw-danger-bg); color: #991b1b; }
 
 /* ==========================================
-   TOGGLE SWITCH - UNIVERSAL
+   TOGGLE SWITCH - HIDE DEFAULT CHECKBOX
    ========================================== */
 
 .qaw-switch {
@@ -404,17 +398,20 @@
     display: inline-block;
     width: 50px;
     height: 26px;
-    flex-shrink: 0;
+    vertical-align: middle;
 }
 
-.qaw-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-    position: absolute;
+/* HIDE the actual checkbox completely */
+.qaw-switch input[type="checkbox"] {
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    position: absolute !important;
+    pointer-events: none !important;
 }
 
-.qaw-switch-slider {
+/* The slider background */
+.qaw-switch .qaw-slider {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -426,7 +423,8 @@
     transition: all 0.3s ease;
 }
 
-.qaw-switch-slider:before {
+/* The slider circle/knob */
+.qaw-switch .qaw-slider:before {
     position: absolute;
     content: "";
     height: 20px;
@@ -439,27 +437,28 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Active State - Green */
-.qaw-switch input:checked + .qaw-switch-slider {
-    background-color: var(--qaw-success);
+/* When checked - green background */
+.qaw-switch input[type="checkbox"]:checked + .qaw-slider {
+    background-color: #22c55e;
 }
 
-.qaw-switch input:checked + .qaw-switch-slider:before {
+/* When checked - move knob to right */
+.qaw-switch input[type="checkbox"]:checked + .qaw-slider:before {
     transform: translateX(24px);
 }
 
-/* Focus State */
-.qaw-switch input:focus + .qaw-switch-slider {
+/* Focus state */
+.qaw-switch input[type="checkbox"]:focus + .qaw-slider {
     box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.3);
 }
 
-/* Disabled State */
-.qaw-switch input:disabled + .qaw-switch-slider {
+/* Disabled state */
+.qaw-switch input[type="checkbox"]:disabled + .qaw-slider {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
-/* Switch with Label */
+/* Switch with label wrapper */
 .qaw-switch-wrap {
     display: inline-flex;
     align-items: center;
@@ -625,7 +624,7 @@
 }
 
 /* ==========================================
-   GENERATE BUTTON - ONLY ICON SPINS
+   GENERATE BUTTON - ONLY SVG ICON SPINS
    ========================================== */
 
 #qaw-generate-slug {
@@ -635,20 +634,22 @@
     gap: 8px;
 }
 
-#qaw-generate-slug .qaw-generate-icon {
+/* The SVG icon inside generate button */
+#qaw-generate-slug .qaw-icon-spin {
     width: 18px;
     height: 18px;
     flex-shrink: 0;
+    display: inline-block;
 }
 
-/* Only the icon spins, not the button */
-#qaw-generate-slug.generating .qaw-generate-icon {
-    animation: qaw-icon-spin 0.6s linear infinite;
+/* When button has 'generating' class, only the SVG spins */
+#qaw-generate-slug.generating .qaw-icon-spin {
+    animation: qaw-rotate 0.6s linear infinite;
 }
 
-@keyframes qaw-icon-spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+@keyframes qaw-rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* URL Preview */
