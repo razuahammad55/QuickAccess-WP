@@ -112,14 +112,15 @@ class QAW_Admin {
      * Register settings
      */
     public function register_settings() {
-        register_setting( 'qaw_settings', 'qaw_rate_limit_attempts', 'absint' );
-        register_setting( 'qaw_settings', 'qaw_rate_limit_window', 'absint' );
-        register_setting( 'qaw_settings', 'qaw_block_duration', 'absint' );
-        register_setting( 'qaw_settings', 'qaw_default_redirect', 'esc_url_raw' );
-        register_setting( 'qaw_settings', 'qaw_invalid_slug_message', 'sanitize_textarea_field' );
-        register_setting( 'qaw_settings', 'qaw_enable_logging', 'absint' );
-        register_setting( 'qaw_settings', 'qaw_log_retention_days', 'absint' );
-    }
+    register_setting( 'qaw_settings', 'qaw_rate_limit_attempts', 'absint' );
+    register_setting( 'qaw_settings', 'qaw_rate_limit_window', 'absint' );
+    register_setting( 'qaw_settings', 'qaw_block_duration', 'absint' );
+    register_setting( 'qaw_settings', 'qaw_default_redirect', 'esc_url_raw' );
+    register_setting( 'qaw_settings', 'qaw_invalid_slug_message', 'sanitize_textarea_field' );
+    register_setting( 'qaw_settings', 'qaw_enable_logging', 'absint' );
+    register_setting( 'qaw_settings', 'qaw_log_retention_days', 'absint' );
+    register_setting( 'qaw_settings', 'qaw_delete_data_on_uninstall', 'absint' ); // NEW
+}
 
     /**
      * Slugs page
