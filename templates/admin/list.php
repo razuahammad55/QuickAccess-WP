@@ -119,9 +119,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                         $access_url = home_url( '/' . $item->slug );
                         $is_expired = ! empty( $item->expires_at ) && $item->expires_at !== '0000-00-00 00:00:00' && strtotime( $item->expires_at ) < current_time( 'timestamp' );
                         $is_maxed = $item->max_uses > 0 && $item->current_uses >= $item->max_uses;
-                        $is_active = $item->is_active && ! $is_expired && ! $is_maxed;
                         $initials = strtoupper( substr( $item->display_name ?: 'U', 0, 1 ) );
-                        $can_toggle = ! $is_expired && ! $is_maxed;
                     ?>
                         <tr>
                             <td class="column-slug">
@@ -135,11 +133,8 @@ if ( ! defined( 'ABSPATH' ) ) {
                                 <div class="qaw-url-wrap">
                                     <code class="qaw-url"><?php echo esc_url( $access_url ); ?></code>
                                     <button type="button" class="qaw-copy-btn" data-url="<?php echo esc_url( $access_url ); ?>" title="<?php esc_attr_e( 'Copy URL', 'quickaccess-wp' ); ?>">
-                                        <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                        </svg>
-                                        <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                         </svg>
                                     </button>
                                 </div>
@@ -162,18 +157,24 @@ if ( ! defined( 'ABSPATH' ) ) {
                             <td class="column-expires">
                                 <?php if ( ! empty( $item->expires_at ) && $item->expires_at !== '0000-00-00 00:00:00' ) : ?>
                                     <?php echo esc_html( wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $item->expires_at ) ) ); ?>
-                                    <?php if ( $is_expired ) : ?>
-                                        <br><span class="qaw-badge qaw-badge-expired"><?php esc_html_e( 'Expired', 'quickaccess-wp' ); ?></span>
-                                    <?php endif; ?>
                                 <?php else : ?>
                                     <span style="color: var(--qaw-gray-400);"><?php esc_html_e( 'Never', 'quickaccess-wp' ); ?></span>
                                 <?php endif; ?>
                             </td>
                             <td class="column-status">
-                                <label class="qaw-switch" title="<?php echo $can_toggle ? ( $item->is_active ? esc_attr__( 'Click to disable', 'quickaccess-wp' ) : esc_attr__( 'Click to enable', 'quickaccess-wp' ) ) : esc_attr__( 'Cannot toggle - expired or maxed', 'quickaccess-wp' ); ?>">
-                                    <input type="checkbox" class="qaw-status-toggle" data-id="<?php echo esc_attr( $item->id ); ?>" <?php checked( $item->is_active, 1 ); ?> <?php disabled( ! $can_toggle ); ?>>
-                                    <span class="qaw-switch-slider"></span>
-                                </label>
+                                <?php if ( $is_expired ) : ?>
+                                    <!-- Show Expired badge -->
+                                    <span class="qaw-badge qaw-badge-expired"><?php esc_html_e( 'Expired', 'quickaccess-wp' ); ?></span>
+                                <?php elseif ( $is_maxed ) : ?>
+                                    <!-- Show Maxed badge -->
+                                    <span class="qaw-badge qaw-badge-maxed"><?php esc_html_e( 'Max Used', 'quickaccess-wp' ); ?></span>
+                                <?php else : ?>
+                                    <!-- Show toggle switch -->
+                                    <label class="qaw-switch" title="<?php echo $item->is_active ? esc_attr__( 'Click to disable', 'quickaccess-wp' ) : esc_attr__( 'Click to enable', 'quickaccess-wp' ); ?>">
+                                        <input type="checkbox" class="qaw-status-toggle" data-id="<?php echo esc_attr( $item->id ); ?>" <?php checked( $item->is_active, 1 ); ?>>
+                                        <span class="qaw-switch-slider"></span>
+                                    </label>
+                                <?php endif; ?>
                             </td>
                             <td class="column-actions">
                                 <div class="qaw-actions">
