@@ -90,16 +90,16 @@ if ( ! defined( 'ABSPATH' ) ) {
     <div class="qaw-table-wrap">
         <table class="qaw-table">
             <thead>
-                <tr>
-                    <th class="column-slug"><?php esc_html_e( 'Slug', 'quickaccess-wp' ); ?></th>
-                    <th class="column-url"><?php esc_html_e( 'Access URL', 'quickaccess-wp' ); ?></th>
-                    <th class="column-user"><?php esc_html_e( 'User', 'quickaccess-wp' ); ?></th>
-                    <th class="column-usage"><?php esc_html_e( 'Usage', 'quickaccess-wp' ); ?></th>
-                    <th class="column-expires"><?php esc_html_e( 'Expires', 'quickaccess-wp' ); ?></th>
-                    <th class="column-status"><?php esc_html_e( 'Status', 'quickaccess-wp' ); ?></th>
-                    <th class="column-actions"><?php esc_html_e( 'Actions', 'quickaccess-wp' ); ?></th>
-                </tr>
-            </thead>
+    <tr>
+        <th class="column-slug"><?php esc_html_e( 'Slug', 'quickaccess-wp' ); ?></th>
+        <th class="column-url"><?php esc_html_e( 'Access URL', 'quickaccess-wp' ); ?></th>
+        <th class="column-user"><?php esc_html_e( 'User', 'quickaccess-wp' ); ?></th>
+        <th class="column-usage"><?php esc_html_e( 'Usage', 'quickaccess-wp' ); ?></th>
+        <th class="column-expires"><?php esc_html_e( 'Expires', 'quickaccess-wp' ); ?></th>
+        <th class="column-status"><?php esc_html_e( 'Active', 'quickaccess-wp' ); ?></th>
+        <th class="column-actions"><?php esc_html_e( 'Actions', 'quickaccess-wp' ); ?></th>
+    </tr>
+</thead>
             <tbody>
                 <?php if ( empty( $slugs ) ) : ?>
                     <tr>
