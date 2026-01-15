@@ -163,16 +163,14 @@ if ( ! defined( 'ABSPATH' ) ) {
                             </td>
                             <td class="column-status">
                                 <?php if ( $is_expired ) : ?>
-                                    <!-- Show Expired badge -->
                                     <span class="qaw-badge qaw-badge-expired"><?php esc_html_e( 'Expired', 'quickaccess-wp' ); ?></span>
                                 <?php elseif ( $is_maxed ) : ?>
-                                    <!-- Show Maxed badge -->
                                     <span class="qaw-badge qaw-badge-maxed"><?php esc_html_e( 'Max Used', 'quickaccess-wp' ); ?></span>
                                 <?php else : ?>
-                                    <!-- Show toggle switch -->
-                                    <label class="qaw-switch" title="<?php echo $item->is_active ? esc_attr__( 'Click to disable', 'quickaccess-wp' ) : esc_attr__( 'Click to enable', 'quickaccess-wp' ); ?>">
+                                    <!-- Toggle Switch -->
+                                    <label class="qaw-switch">
                                         <input type="checkbox" class="qaw-status-toggle" data-id="<?php echo esc_attr( $item->id ); ?>" <?php checked( $item->is_active, 1 ); ?>>
-                                        <span class="qaw-switch-slider"></span>
+                                        <span class="qaw-slider"></span>
                                     </label>
                                 <?php endif; ?>
                             </td>
