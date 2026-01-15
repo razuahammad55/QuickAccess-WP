@@ -40,10 +40,10 @@ $expires_value = $is_edit && ! empty( $slug->expires_at ) && $slug->expires_at !
                         <div class="qaw-slug-input-group">
                             <input type="text" id="qaw-slug" name="slug" value="<?php echo $is_edit ? esc_attr( $slug->slug ) : ''; ?>" required pattern="[a-zA-Z0-9\-_]+" autocomplete="off">
                             <button type="button" id="qaw-generate-slug" class="qaw-btn qaw-btn-secondary qaw-btn-sm">
-                                <svg class="qaw-generate-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg class="qaw-icon-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                 </svg>
-                                <?php esc_html_e( 'Generate', 'quickaccess-wp' ); ?>
+                                <span><?php esc_html_e( 'Generate', 'quickaccess-wp' ); ?></span>
                             </button>
                         </div>
                         <div class="qaw-url-preview">
@@ -119,7 +119,7 @@ $expires_value = $is_edit && ! empty( $slug->expires_at ) && $slug->expires_at !
                             <div class="qaw-switch-wrap">
                                 <label class="qaw-switch">
                                     <input type="checkbox" id="qaw-active" name="is_active" value="1" <?php checked( $slug->is_active, 1 ); ?>>
-                                    <span class="qaw-switch-slider"></span>
+                                    <span class="qaw-slider"></span>
                                 </label>
                                 <span class="qaw-switch-label"><?php esc_html_e( 'Active', 'quickaccess-wp' ); ?></span>
                             </div>
