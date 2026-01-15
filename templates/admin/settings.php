@@ -28,10 +28,6 @@ if ( ! defined( 'ABSPATH' ) ) {
                     </h2>
                 </div>
                 <div class="qaw-card-body">
-                    <p class="description" style="margin-bottom: 20px;">
-                        <?php esc_html_e( 'Configure rate limiting to protect against brute-force attacks.', 'quickaccess-wp' ); ?>
-                    </p>
-                    
                     <div class="qaw-settings-grid">
                         <div class="qaw-form-row">
                             <label for="qaw_rate_limit_attempts"><?php esc_html_e( 'Max Failed Attempts', 'quickaccess-wp' ); ?></label>
@@ -96,7 +92,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                         <div class="qaw-switch-wrap">
                             <label class="qaw-switch">
                                 <input type="checkbox" name="qaw_enable_logging" value="1" <?php checked( get_option( 'qaw_enable_logging', 1 ), 1 ); ?>>
-                                <span class="qaw-switch-slider"></span>
+                                <span class="qaw-slider"></span>
                             </label>
                             <span class="qaw-switch-label"><?php esc_html_e( 'Log all access attempts', 'quickaccess-wp' ); ?></span>
                         </div>
@@ -126,7 +122,7 @@ if ( ! defined( 'ABSPATH' ) ) {
                         <div class="qaw-switch-wrap">
                             <label class="qaw-switch">
                                 <input type="checkbox" name="qaw_delete_data_on_uninstall" value="1" <?php checked( get_option( 'qaw_delete_data_on_uninstall', 0 ), 1 ); ?>>
-                                <span class="qaw-switch-slider"></span>
+                                <span class="qaw-slider"></span>
                             </label>
                             <span class="qaw-switch-label"><?php esc_html_e( 'Remove all plugin data when uninstalled', 'quickaccess-wp' ); ?></span>
                         </div>
