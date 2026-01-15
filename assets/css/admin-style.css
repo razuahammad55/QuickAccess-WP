@@ -1,20 +1,16 @@
 /**
  * QuickAccess WP Admin Styles
- *
  * @package QuickAccessWP
  * @version 1.0.0
  */
-
-/* ==========================================================================
-   Variables
-   ========================================================================== */
 
 :root {
     --qaw-primary: #6366f1;
     --qaw-primary-dark: #4f46e5;
     --qaw-primary-light: #818cf8;
-    --qaw-success: #10b981;
-    --qaw-success-bg: #d1fae5;
+    --qaw-success: #22c55e;
+    --qaw-success-dark: #16a34a;
+    --qaw-success-bg: #dcfce7;
     --qaw-warning: #f59e0b;
     --qaw-warning-bg: #fef3c7;
     --qaw-danger: #ef4444;
@@ -31,15 +27,12 @@
     --qaw-gray-900: #111827;
     --qaw-radius: 8px;
     --qaw-radius-lg: 12px;
-    --qaw-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
-    --qaw-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --qaw-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --qaw-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --qaw-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --qaw-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-/* ==========================================================================
-   Base Styles
-   ========================================================================== */
-
+/* Base */
 .qaw-wrap {
     max-width: 1400px;
     margin: 0;
@@ -72,10 +65,7 @@
     color: #fff;
 }
 
-/* ==========================================================================
-   Statistics Cards
-   ========================================================================== */
-
+/* Stats */
 .qaw-stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -112,7 +102,7 @@
 }
 
 .qaw-stat-card .qaw-stat-icon.success {
-    background: linear-gradient(135deg, #34d399, var(--qaw-success));
+    background: linear-gradient(135deg, #4ade80, var(--qaw-success));
 }
 
 .qaw-stat-card .qaw-stat-icon.warning {
@@ -143,10 +133,7 @@
     font-weight: 500;
 }
 
-/* ==========================================================================
-   Filter Bar
-   ========================================================================== */
-
+/* Filter Bar */
 .qaw-filter-bar {
     display: flex;
     justify-content: space-between;
@@ -228,10 +215,7 @@
     background: var(--qaw-gray-200);
 }
 
-/* ==========================================================================
-   Table Styles
-   ========================================================================== */
-
+/* Table */
 .qaw-table-wrap {
     background: #fff;
     border-radius: var(--qaw-radius-lg);
@@ -274,38 +258,14 @@
     border-bottom: none;
 }
 
-.qaw-table .column-slug {
-    width: 15%;
-}
+.qaw-table .column-slug { width: 14%; }
+.qaw-table .column-url { width: 22%; }
+.qaw-table .column-user { width: 17%; }
+.qaw-table .column-usage { width: 9%; text-align: center; }
+.qaw-table .column-expires { width: 14%; }
+.qaw-table .column-status { width: 12%; text-align: center; }
+.qaw-table .column-actions { width: 12%; text-align: right; }
 
-.qaw-table .column-url {
-    width: 22%;
-}
-
-.qaw-table .column-user {
-    width: 18%;
-}
-
-.qaw-table .column-usage {
-    width: 10%;
-    text-align: center;
-}
-
-.qaw-table .column-expires {
-    width: 14%;
-}
-
-.qaw-table .column-status {
-    width: 10%;
-    text-align: center;
-}
-
-.qaw-table .column-actions {
-    width: 11%;
-    text-align: right;
-}
-
-/* Slug column */
 .qaw-slug-name {
     font-weight: 600;
     color: var(--qaw-gray-900);
@@ -321,7 +281,7 @@
     color: var(--qaw-primary);
 }
 
-/* URL column */
+/* URL & Copy */
 .qaw-url-wrap {
     display: flex;
     align-items: center;
@@ -342,9 +302,11 @@
     text-overflow: ellipsis;
 }
 
-/* Copy Button - IMPROVED */
+/* Copy Button */
 .qaw-copy-btn {
-    padding: 6px 10px;
+    width: 34px;
+    height: 34px;
+    padding: 0;
     background: #fff;
     border: 1px solid var(--qaw-gray-300);
     border-radius: var(--qaw-radius);
@@ -353,8 +315,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 34px;
-    min-height: 34px;
 }
 
 .qaw-copy-btn:hover {
@@ -362,24 +322,37 @@
     border-color: var(--qaw-gray-400);
 }
 
-.qaw-copy-btn svg {
+.qaw-copy-btn .copy-icon,
+.qaw-copy-btn .check-icon {
     width: 16px;
     height: 16px;
-    color: var(--qaw-gray-500);
     transition: all 0.2s ease;
 }
 
-/* Copy Button Success State */
+.qaw-copy-btn .copy-icon {
+    color: var(--qaw-gray-500);
+}
+
+.qaw-copy-btn .check-icon {
+    color: var(--qaw-success);
+    display: none;
+}
+
+/* Copy Success State */
 .qaw-copy-btn.copied {
     background: var(--qaw-success-bg);
     border-color: var(--qaw-success);
 }
 
-.qaw-copy-btn.copied svg {
-    color: var(--qaw-success);
+.qaw-copy-btn.copied .copy-icon {
+    display: none;
 }
 
-/* User column */
+.qaw-copy-btn.copied .check-icon {
+    display: block;
+}
+
+/* User Info */
 .qaw-user-info {
     display: flex;
     align-items: center;
@@ -410,7 +383,7 @@
     color: var(--qaw-gray-500);
 }
 
-/* Usage column */
+/* Usage */
 .qaw-usage {
     display: inline-flex;
     align-items: center;
@@ -423,55 +396,106 @@
     color: var(--qaw-gray-400);
 }
 
-/* ==========================================================================
-   Badges
-   ========================================================================== */
-
+/* Badges */
 .qaw-badge {
     display: inline-flex;
     align-items: center;
     padding: 5px 12px;
     border-radius: 20px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.3px;
 }
 
-.qaw-badge-active {
-    background: var(--qaw-success-bg);
-    color: #065f46;
+.qaw-badge-active { background: var(--qaw-success-bg); color: #166534; }
+.qaw-badge-inactive { background: var(--qaw-gray-200); color: var(--qaw-gray-600); }
+.qaw-badge-expired { background: var(--qaw-warning-bg); color: #92400e; }
+.qaw-badge-maxed { background: #dbeafe; color: #1e40af; }
+.qaw-badge-success { background: var(--qaw-success-bg); color: #166534; }
+.qaw-badge-denied, .qaw-badge-invalid { background: var(--qaw-danger-bg); color: #991b1b; }
+
+/* ==========================================
+   TOGGLE SWITCH - UNIVERSAL STYLE
+   ========================================== */
+
+.qaw-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
 }
 
-.qaw-badge-inactive {
-    background: var(--qaw-gray-200);
-    color: var(--qaw-gray-600);
+.qaw-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
 }
 
-.qaw-badge-expired {
-    background: var(--qaw-warning-bg);
-    color: #92400e;
+.qaw-switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cbd5e1;
+    border-radius: 26px;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.qaw-badge-maxed {
-    background: #dbeafe;
-    color: #1e40af;
+.qaw-switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.qaw-badge-success {
-    background: var(--qaw-success-bg);
-    color: #065f46;
+/* Active State */
+.qaw-switch input:checked + .qaw-switch-slider {
+    background-color: var(--qaw-success);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 8px rgba(34, 197, 94, 0.4);
 }
 
-.qaw-badge-denied,
-.qaw-badge-invalid {
-    background: var(--qaw-danger-bg);
-    color: #991b1b;
+.qaw-switch input:checked + .qaw-switch-slider:before {
+    transform: translateX(24px);
 }
 
-/* ==========================================================================
-   Action Buttons & Table Toggle
-   ========================================================================== */
+/* Focus State */
+.qaw-switch input:focus + .qaw-switch-slider {
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.3);
+}
+
+/* Disabled State */
+.qaw-switch input:disabled + .qaw-switch-slider {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Switch with Label */
+.qaw-switch-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.qaw-switch-label {
+    font-weight: 500;
+    color: var(--qaw-gray-700);
+    font-size: 14px;
+}
+
+/* ==========================================
+   ACTION BUTTONS
+   ========================================== */
 
 .qaw-actions {
     display: flex;
@@ -521,72 +545,9 @@
     color: var(--qaw-danger);
 }
 
-/* ==========================================================================
-   Table Row Toggle Switch - NEW IMPROVED VERSION
-   ========================================================================== */
-
-.qaw-table-toggle {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    cursor: pointer;
-    user-select: none;
-}
-
-.qaw-table-toggle input {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.qaw-table-toggle-slider {
-    position: relative;
-    width: 44px;
-    height: 24px;
-    background: var(--qaw-gray-300);
-    border-radius: 24px;
-    transition: all 0.3s ease;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.qaw-table-toggle-slider::before {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 18px;
-    height: 18px;
-    background: #fff;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* Active State - Green */
-.qaw-table-toggle input:checked + .qaw-table-toggle-slider {
-    background: var(--qaw-success);
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(16, 185, 129, 0.3);
-}
-
-.qaw-table-toggle input:checked + .qaw-table-toggle-slider::before {
-    transform: translateX(20px);
-}
-
-/* Focus State */
-.qaw-table-toggle input:focus + .qaw-table-toggle-slider {
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
-}
-
-/* Disabled State */
-.qaw-table-toggle input:disabled + .qaw-table-toggle-slider {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-/* ==========================================================================
-   Form Styles
-   ========================================================================== */
+/* ==========================================
+   FORM STYLES
+   ========================================== */
 
 .qaw-form-wrap {
     max-width: 800px;
@@ -633,7 +594,7 @@
     margin-bottom: 0;
 }
 
-.qaw-form-row label {
+.qaw-form-row > label {
     display: block;
     font-weight: 600;
     font-size: 14px;
@@ -674,7 +635,7 @@
     color: var(--qaw-gray-500);
 }
 
-/* Slug input group */
+/* Slug Input Group */
 .qaw-slug-input-group {
     display: flex;
     gap: 10px;
@@ -684,8 +645,27 @@
     flex: 1;
 }
 
-.qaw-slug-input-group .qaw-btn {
+/* Generate Button - ICON SPIN ONLY */
+#qaw-generate-slug {
     white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#qaw-generate-slug .qaw-generate-icon {
+    width: 18px;
+    height: 18px;
+    transition: none;
+}
+
+#qaw-generate-slug.generating .qaw-generate-icon {
+    animation: qaw-icon-spin 0.6s linear infinite;
+}
+
+@keyframes qaw-icon-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* URL Preview */
@@ -708,7 +688,7 @@
     font-weight: 600;
 }
 
-/* Slug status */
+/* Slug Status */
 .qaw-slug-status {
     margin-top: 8px;
     font-size: 13px;
@@ -727,90 +707,9 @@
     color: var(--qaw-gray-500);
 }
 
-/* ==========================================================================
-   Form Toggle Switch - IMPROVED VISIBILITY
-   ========================================================================== */
-
-.qaw-toggle {
-    display: inline-flex;
-    align-items: center;
-    cursor: pointer;
-    user-select: none;
-}
-
-.qaw-toggle input {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.qaw-toggle-slider {
-    position: relative;
-    width: 52px;
-    height: 28px;
-    background: var(--qaw-gray-300);
-    border-radius: 28px;
-    transition: all 0.3s ease;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.qaw-toggle-slider::before {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 22px;
-    height: 22px;
-    background: #fff;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* Inactive State - Show X */
-.qaw-toggle-slider::after {
-    content: '✕';
-    position: absolute;
-    top: 50%;
-    right: 8px;
-    transform: translateY(-50%);
-    font-size: 10px;
-    font-weight: bold;
-    color: #fff;
-    opacity: 0.7;
-}
-
-/* Active State - Green with Checkmark */
-.qaw-toggle input:checked + .qaw-toggle-slider {
-    background: linear-gradient(135deg, #34d399, var(--qaw-success));
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 12px rgba(16, 185, 129, 0.4);
-}
-
-.qaw-toggle input:checked + .qaw-toggle-slider::before {
-    transform: translateX(24px);
-}
-
-.qaw-toggle input:checked + .qaw-toggle-slider::after {
-    content: '✓';
-    right: auto;
-    left: 10px;
-}
-
-/* Focus State */
-.qaw-toggle input:focus + .qaw-toggle-slider {
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
-}
-
-.qaw-toggle-label {
-    margin-left: 12px;
-    font-weight: 500;
-    color: var(--qaw-gray-700);
-}
-
-/* ==========================================================================
-   Buttons
-   ========================================================================== */
+/* ==========================================
+   BUTTONS
+   ========================================== */
 
 .qaw-btn {
     display: inline-flex;
@@ -879,39 +778,19 @@
     margin-top: 24px;
 }
 
-/* ==========================================================================
-   Generate Button - SVG ICON SPIN ONLY
-   ========================================================================== */
-
-#qaw-generate-slug {
-    position: relative;
-}
-
-#qaw-generate-slug svg {
-    transition: transform 0.3s ease;
-}
-
-#qaw-generate-slug.generating svg {
-    animation: qaw-spin-icon 0.8s linear infinite;
-}
-
-/* ==========================================================================
-   Settings Page
-   ========================================================================== */
-
-.qaw-settings-section {
-    margin-bottom: 30px;
-}
+/* ==========================================
+   SETTINGS
+   ========================================== */
 
 .qaw-settings-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
 }
 
-/* ==========================================================================
-   Empty State
-   ========================================================================== */
+/* ==========================================
+   EMPTY STATE
+   ========================================== */
 
 .qaw-empty-state {
     padding: 60px 20px;
@@ -936,9 +815,9 @@
     margin-bottom: 20px;
 }
 
-/* ==========================================================================
-   Pagination
-   ========================================================================== */
+/* ==========================================
+   PAGINATION
+   ========================================== */
 
 .qaw-pagination {
     display: flex;
@@ -975,9 +854,9 @@
     color: #fff;
 }
 
-/* ==========================================================================
-   Toast Notifications
-   ========================================================================== */
+/* ==========================================
+   TOAST
+   ========================================== */
 
 .qaw-toast {
     position: fixed;
@@ -993,92 +872,34 @@
     animation: qaw-slide-in 0.3s ease;
 }
 
-.qaw-toast.success {
-    background: var(--qaw-success);
-}
-
-.qaw-toast.error {
-    background: var(--qaw-danger);
-}
+.qaw-toast.success { background: var(--qaw-success); }
+.qaw-toast.error { background: var(--qaw-danger); }
 
 @keyframes qaw-slide-in {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
 }
 
-/* ==========================================================================
-   Animations
-   ========================================================================== */
-
-@keyframes qaw-spin-icon {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* ==========================================================================
-   Responsive
-   ========================================================================== */
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
 
 @media screen and (max-width: 1200px) {
-    .qaw-table .column-expires {
-        display: none;
-    }
+    .qaw-table .column-expires { display: none; }
 }
 
 @media screen and (max-width: 992px) {
-    .qaw-stats {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .qaw-table .column-url {
-        display: none;
-    }
+    .qaw-stats { grid-template-columns: repeat(2, 1fr); }
+    .qaw-table .column-url { display: none; }
 }
 
 @media screen and (max-width: 782px) {
-    .qaw-wrap {
-        padding: 10px;
-    }
-    
-    .qaw-stats {
-        grid-template-columns: 1fr;
-    }
-    
-    .qaw-filter-bar {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .qaw-filter-tabs {
-        overflow-x: auto;
-        padding-bottom: 5px;
-    }
-    
-    .qaw-search-box {
-        width: 100%;
-    }
-    
-    .qaw-search-box input {
-        min-width: 0;
-        flex: 1;
-    }
-    
-    .qaw-table .column-user,
-    .qaw-table .column-usage {
-        display: none;
-    }
-    
-    .qaw-slug-input-group {
-        flex-direction: column;
-    }
+    .qaw-wrap { padding: 10px; }
+    .qaw-stats { grid-template-columns: 1fr; }
+    .qaw-filter-bar { flex-direction: column; align-items: stretch; }
+    .qaw-filter-tabs { overflow-x: auto; padding-bottom: 5px; }
+    .qaw-search-box { width: 100%; }
+    .qaw-search-box input { min-width: 0; flex: 1; }
+    .qaw-table .column-user, .qaw-table .column-usage { display: none; }
+    .qaw-slug-input-group { flex-direction: column; }
 }
