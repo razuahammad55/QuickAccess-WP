@@ -1,9 +1,7 @@
 <?php
 /**
  * Admin Form Template
- *
  * @package QuickAccessWP
- * @since 1.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -12,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $is_edit = ! empty( $slug );
 $page_title = $is_edit ? __( 'Edit Access Link', 'quickaccess-wp' ) : __( 'Add New Access Link', 'quickaccess-wp' );
-$expires_value = $is_edit && $slug->expires_at ? wp_date( 'Y-m-d\TH:i', strtotime( $slug->expires_at ) ) : '';
+$expires_value = $is_edit && ! empty( $slug->expires_at ) && $slug->expires_at !== '0000-00-00 00:00:00' ? wp_date( 'Y-m-d\TH:i', strtotime( $slug->expires_at ) ) : '';
 ?>
 
 <div class="wrap qaw-wrap">
@@ -42,7 +40,7 @@ $expires_value = $is_edit && $slug->expires_at ? wp_date( 'Y-m-d\TH:i', strtotim
                         <div class="qaw-slug-input-group">
                             <input type="text" id="qaw-slug" name="slug" value="<?php echo $is_edit ? esc_attr( $slug->slug ) : ''; ?>" required pattern="[a-zA-Z0-9\-_]+" autocomplete="off">
                             <button type="button" id="qaw-generate-slug" class="qaw-btn qaw-btn-secondary qaw-btn-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18">
+                                <svg class="qaw-generate-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                 </svg>
                                 <?php esc_html_e( 'Generate', 'quickaccess-wp' ); ?>
@@ -53,7 +51,7 @@ $expires_value = $is_edit && $slug->expires_at ? wp_date( 'Y-m-d\TH:i', strtotim
                             <code><?php echo esc_url( home_url( '/' ) ); ?><span id="slug-preview"><?php echo $is_edit ? esc_html( $slug->slug ) : 'your-slug'; ?></span></code>
                         </div>
                         <div id="slug-status" class="qaw-slug-status"></div>
-                        <p class="description"><?php esc_html_e( 'Only letters, numbers, hyphens, and underscores. Must not conflict with existing pages or posts.', 'quickaccess-wp' ); ?></p>
+                        <p class="description"><?php esc_html_e( 'Only letters, numbers, hyphens, and underscores.', 'quickaccess-wp' ); ?></p>
                     </div>
 
                     <!-- User -->
@@ -77,7 +75,7 @@ $expires_value = $is_edit && $slug->expires_at ? wp_date( 'Y-m-d\TH:i', strtotim
                     <div class="qaw-form-row">
                         <label for="qaw-redirect"><?php esc_html_e( 'Redirect URL', 'quickaccess-wp' ); ?></label>
                         <input type="url" id="qaw-redirect" name="redirect_url" value="<?php echo $is_edit ? esc_url( $slug->redirect_url ) : ''; ?>" placeholder="<?php echo esc_url( home_url() ); ?>">
-                        <p class="description"><?php esc_html_e( 'Where to redirect after login. Leave empty for default homepage.', 'quickaccess-wp' ); ?></p>
+                        <p class="description"><?php esc_html_e( 'Where to redirect after login. Leave empty for default.', 'quickaccess-wp' ); ?></p>
                     </div>
 
                 </div>
@@ -104,25 +102,27 @@ $expires_value = $is_edit && $slug->expires_at ? wp_date( 'Y-m-d\TH:i', strtotim
                                 <?php printf( esc_html__( 'Current uses: %d', 'quickaccess-wp' ), $slug->current_uses ); ?>
                             </span>
                         <?php endif; ?>
-                        <p class="description"><?php esc_html_e( 'Maximum number of times this link can be used. Set to 0 for unlimited.', 'quickaccess-wp' ); ?></p>
+                        <p class="description"><?php esc_html_e( 'Set to 0 for unlimited.', 'quickaccess-wp' ); ?></p>
                     </div>
 
                     <!-- Expiration -->
                     <div class="qaw-form-row">
                         <label for="qaw-expires"><?php esc_html_e( 'Expiration Date', 'quickaccess-wp' ); ?></label>
                         <input type="datetime-local" id="qaw-expires" name="expires_at" value="<?php echo esc_attr( $expires_value ); ?>" style="max-width: 250px;">
-                        <p class="description"><?php esc_html_e( 'When this link should expire. Leave empty for no expiration.', 'quickaccess-wp' ); ?></p>
+                        <p class="description"><?php esc_html_e( 'Leave empty for no expiration.', 'quickaccess-wp' ); ?></p>
                     </div>
 
                     <?php if ( $is_edit ) : ?>
                         <!-- Status -->
                         <div class="qaw-form-row">
                             <label><?php esc_html_e( 'Status', 'quickaccess-wp' ); ?></label>
-                            <label class="qaw-toggle">
-                                <input type="checkbox" id="qaw-active" name="is_active" value="1" <?php checked( $slug->is_active, 1 ); ?>>
-                                <span class="qaw-toggle-slider"></span>
-                                <span class="qaw-toggle-label"><?php esc_html_e( 'Active', 'quickaccess-wp' ); ?></span>
-                            </label>
+                            <div class="qaw-switch-wrap">
+                                <label class="qaw-switch">
+                                    <input type="checkbox" id="qaw-active" name="is_active" value="1" <?php checked( $slug->is_active, 1 ); ?>>
+                                    <span class="qaw-switch-slider"></span>
+                                </label>
+                                <span class="qaw-switch-label"><?php esc_html_e( 'Active', 'quickaccess-wp' ); ?></span>
+                            </div>
                         </div>
                     <?php endif; ?>
 
