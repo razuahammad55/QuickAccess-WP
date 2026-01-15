@@ -7,6 +7,12 @@
 (function($) {
     'use strict';
 
+    // SVG Icons
+    const ICONS = {
+        copy: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>',
+        check: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>'
+    };
+
     const QAW = {
         init: function() {
             this.bindEvents();
@@ -32,7 +38,9 @@
             $('#slug-preview').text(slug);
         },
 
-        // Copy URL with checkmark feedback
+        /**
+         * Copy URL - Swap icon to checkmark temporarily
+         */
         copyUrl: function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -40,7 +48,7 @@
             const $btn = $(this);
             const url = $btn.data('url');
 
-            if (!url) return;
+            if (!url || $btn.hasClass('copied')) return;
 
             // Copy to clipboard
             if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -68,13 +76,23 @@
             $temp.remove();
         },
 
+        /**
+         * Show copy success - swap icon
+         */
         showCopySuccess: function($btn) {
-            $btn.addClass('copied');
+            // Store original icon
+            const originalIcon = $btn.html();
+            
+            // Change to checkmark icon and add class
+            $btn.html(ICONS.check).addClass('copied');
+            
+            // Show toast
             QAW.toast(qawAdmin.i18n.copied, 'success');
             
+            // Revert after 1.5 seconds
             setTimeout(function() {
-                $btn.removeClass('copied');
-            }, 2000);
+                $btn.html(originalIcon).removeClass('copied');
+            }, 1500);
         },
 
         deleteSlug: function(e) {
@@ -116,7 +134,9 @@
             });
         },
 
-        // Toggle status via switch
+        /**
+         * Toggle status via switch
+         */
         toggleSlug: function() {
             const $checkbox = $(this);
             const id = $checkbox.data('id');
@@ -137,12 +157,14 @@
                     if (response.success) {
                         QAW.toast(response.data.message, 'success');
                     } else {
+                        // Revert checkbox
                         $checkbox.prop('checked', !isChecked);
                         QAW.toast(response.data.message, 'error');
                     }
                     $checkbox.prop('disabled', false);
                 },
                 error: function() {
+                    // Revert checkbox
                     $checkbox.prop('checked', !isChecked);
                     QAW.toast(qawAdmin.i18n.error, 'error');
                     $checkbox.prop('disabled', false);
@@ -150,14 +172,17 @@
             });
         },
 
-        // Generate slug - only icon spins
+        /**
+         * Generate slug - only icon spins
+         */
         generateSlug: function(e) {
             e.preventDefault();
 
             const $btn = $(this);
             
-            if ($btn.hasClass('generating')) return;
+            if ($btn.hasClass('generating') || $btn.prop('disabled')) return;
             
+            // Add class to spin only the icon
             $btn.addClass('generating').prop('disabled', true);
 
             $.ajax({
