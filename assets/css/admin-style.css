@@ -97,21 +97,10 @@
     margin-bottom: 16px;
 }
 
-.qaw-stat-card .qaw-stat-icon.primary {
-    background: linear-gradient(135deg, var(--qaw-primary-light), var(--qaw-primary));
-}
-
-.qaw-stat-card .qaw-stat-icon.success {
-    background: linear-gradient(135deg, #4ade80, var(--qaw-success));
-}
-
-.qaw-stat-card .qaw-stat-icon.warning {
-    background: linear-gradient(135deg, #fbbf24, var(--qaw-warning));
-}
-
-.qaw-stat-card .qaw-stat-icon.info {
-    background: linear-gradient(135deg, #60a5fa, #3b82f6);
-}
+.qaw-stat-card .qaw-stat-icon.primary { background: linear-gradient(135deg, var(--qaw-primary-light), var(--qaw-primary)); }
+.qaw-stat-card .qaw-stat-icon.success { background: linear-gradient(135deg, #4ade80, var(--qaw-success)); }
+.qaw-stat-card .qaw-stat-icon.warning { background: linear-gradient(135deg, #fbbf24, var(--qaw-warning)); }
+.qaw-stat-card .qaw-stat-icon.info { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
 
 .qaw-stat-card .qaw-stat-icon svg {
     width: 24px;
@@ -302,7 +291,10 @@
     text-overflow: ellipsis;
 }
 
-/* Copy Button */
+/* ==========================================
+   COPY BUTTON - SINGLE ICON SWAP
+   ========================================== */
+
 .qaw-copy-btn {
     width: 34px;
     height: 34px;
@@ -315,6 +307,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
 .qaw-copy-btn:hover {
@@ -322,34 +315,21 @@
     border-color: var(--qaw-gray-400);
 }
 
-.qaw-copy-btn .copy-icon,
-.qaw-copy-btn .check-icon {
+.qaw-copy-btn svg {
     width: 16px;
     height: 16px;
+    color: var(--qaw-gray-500);
     transition: all 0.2s ease;
 }
 
-.qaw-copy-btn .copy-icon {
-    color: var(--qaw-gray-500);
-}
-
-.qaw-copy-btn .check-icon {
-    color: var(--qaw-success);
-    display: none;
-}
-
-/* Copy Success State */
+/* Success State - Green background and border */
 .qaw-copy-btn.copied {
     background: var(--qaw-success-bg);
     border-color: var(--qaw-success);
 }
 
-.qaw-copy-btn.copied .copy-icon {
-    display: none;
-}
-
-.qaw-copy-btn.copied .check-icon {
-    display: block;
+.qaw-copy-btn.copied svg {
+    color: var(--qaw-success);
 }
 
 /* User Info */
@@ -410,13 +390,13 @@
 
 .qaw-badge-active { background: var(--qaw-success-bg); color: #166534; }
 .qaw-badge-inactive { background: var(--qaw-gray-200); color: var(--qaw-gray-600); }
-.qaw-badge-expired { background: var(--qaw-warning-bg); color: #92400e; }
+.qaw-badge-expired { background: var(--qaw-danger-bg); color: #991b1b; }
 .qaw-badge-maxed { background: #dbeafe; color: #1e40af; }
 .qaw-badge-success { background: var(--qaw-success-bg); color: #166534; }
 .qaw-badge-denied, .qaw-badge-invalid { background: var(--qaw-danger-bg); color: #991b1b; }
 
 /* ==========================================
-   TOGGLE SWITCH - UNIVERSAL STYLE
+   TOGGLE SWITCH - UNIVERSAL
    ========================================== */
 
 .qaw-switch {
@@ -424,6 +404,7 @@
     display: inline-block;
     width: 50px;
     height: 26px;
+    flex-shrink: 0;
 }
 
 .qaw-switch input {
@@ -443,7 +424,6 @@
     background-color: #cbd5e1;
     border-radius: 26px;
     transition: all 0.3s ease;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .qaw-switch-slider:before {
@@ -459,10 +439,9 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Active State */
+/* Active State - Green */
 .qaw-switch input:checked + .qaw-switch-slider {
     background-color: var(--qaw-success);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 8px rgba(34, 197, 94, 0.4);
 }
 
 .qaw-switch input:checked + .qaw-switch-slider:before {
@@ -594,7 +573,7 @@
     margin-bottom: 0;
 }
 
-.qaw-form-row > label {
+.qaw-form-row > label:first-child {
     display: block;
     font-weight: 600;
     font-size: 14px;
@@ -645,7 +624,10 @@
     flex: 1;
 }
 
-/* Generate Button - ICON SPIN ONLY */
+/* ==========================================
+   GENERATE BUTTON - ONLY ICON SPINS
+   ========================================== */
+
 #qaw-generate-slug {
     white-space: nowrap;
     display: inline-flex;
@@ -656,16 +638,17 @@
 #qaw-generate-slug .qaw-generate-icon {
     width: 18px;
     height: 18px;
-    transition: none;
+    flex-shrink: 0;
 }
 
+/* Only the icon spins, not the button */
 #qaw-generate-slug.generating .qaw-generate-icon {
     animation: qaw-icon-spin 0.6s linear infinite;
 }
 
 @keyframes qaw-icon-spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 /* URL Preview */
@@ -695,17 +678,9 @@
     font-weight: 500;
 }
 
-.qaw-slug-status.available {
-    color: var(--qaw-success);
-}
-
-.qaw-slug-status.unavailable {
-    color: var(--qaw-danger);
-}
-
-.qaw-slug-status.checking {
-    color: var(--qaw-gray-500);
-}
+.qaw-slug-status.available { color: var(--qaw-success); }
+.qaw-slug-status.unavailable { color: var(--qaw-danger); }
+.qaw-slug-status.checking { color: var(--qaw-gray-500); }
 
 /* ==========================================
    BUTTONS
@@ -729,6 +704,7 @@
 .qaw-btn svg {
     width: 18px;
     height: 18px;
+    flex-shrink: 0;
 }
 
 .qaw-btn-primary {
