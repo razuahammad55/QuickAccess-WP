@@ -138,59 +138,65 @@ class QAW_Security {
     }
 
     /**
- * Validate slug access
- *
- * @param object $slug Slug data.
- * @return array
- */
-public static function validate_access( $slug ) {
-    // Check if active
-    if ( ! $slug->is_active ) {
-        return array(
-            'valid'   => false,
-            'code'    => 'inactive',
-            'message' => __( 'This access link has been disabled.', 'quickaccess-wp' ),
-        );
-    }
-
-    // Check expiration - FIXED: proper timezone handling
-    if ( ! empty( $slug->expires_at ) ) {
-        $expires_timestamp = strtotime( $slug->expires_at );
-        $current_timestamp = current_time( 'timestamp' ); // WordPress timezone-aware timestamp
-        
-        if ( $current_timestamp > $expires_timestamp ) {
+     * Validate slug access
+     *
+     * @param object $slug Slug data.
+     * @return array
+     */
+    public static function validate_access( $slug ) {
+        // Check if active
+        if ( ! $slug->is_active ) {
             return array(
                 'valid'   => false,
-                'code'    => 'expired',
-                'message' => __( 'This access link has expired.', 'quickaccess-wp' ),
+                'code'    => 'inactive',
+                'message' => __( 'This access link has been disabled.', 'quickaccess-wp' ),
             );
         }
-    }
 
-    // Check max uses
-    if ( $slug->max_uses > 0 && $slug->current_uses >= $slug->max_uses ) {
+        // Check expiration - FIXED
+        if ( ! empty( $slug->expires_at ) && $slug->expires_at !== '0000-00-00 00:00:00' ) {
+            // Get current time in WordPress timezone
+            $current_time = current_time( 'mysql' );
+            $current_timestamp = strtotime( $current_time );
+            $expires_timestamp = strtotime( $slug->expires_at );
+            
+            // Debug log (remove in production)
+            error_log( 'QAW Debug - Current: ' . $current_time . ' (' . $current_timestamp . ')' );
+            error_log( 'QAW Debug - Expires: ' . $slug->expires_at . ' (' . $expires_timestamp . ')' );
+            
+            if ( $expires_timestamp > 0 && $current_timestamp >= $expires_timestamp ) {
+                return array(
+                    'valid'   => false,
+                    'code'    => 'expired',
+                    'message' => __( 'This access link has expired.', 'quickaccess-wp' ),
+                );
+            }
+        }
+
+        // Check max uses
+        if ( $slug->max_uses > 0 && $slug->current_uses >= $slug->max_uses ) {
+            return array(
+                'valid'   => false,
+                'code'    => 'maxed',
+                'message' => __( 'This access link has reached its usage limit.', 'quickaccess-wp' ),
+            );
+        }
+
+        // Check user exists
+        $user = get_user_by( 'ID', $slug->user_id );
+        if ( ! $user ) {
+            return array(
+                'valid'   => false,
+                'code'    => 'no_user',
+                'message' => __( 'User account not found.', 'quickaccess-wp' ),
+            );
+        }
+
         return array(
-            'valid'   => false,
-            'code'    => 'maxed',
-            'message' => __( 'This access link has reached its usage limit.', 'quickaccess-wp' ),
+            'valid' => true,
+            'user'  => $user,
         );
     }
-
-    // Check user exists
-    $user = get_user_by( 'ID', $slug->user_id );
-    if ( ! $user ) {
-        return array(
-            'valid'   => false,
-            'code'    => 'no_user',
-            'message' => __( 'User account not found.', 'quickaccess-wp' ),
-        );
-    }
-
-    return array(
-        'valid' => true,
-        'user'  => $user,
-    );
-}
 
     /**
      * Generate random slug
